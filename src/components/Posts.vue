@@ -43,7 +43,7 @@ onMounted(() => {
 			<div>{{ post.body }}</div>
 		</div>
 	</div>
-	<button @click="">Загрузить еще!!!</button>
+	<button @click="">Загрузить еще!</button>
 </template>
 
 <style scoped lang="scss">
