@@ -1,6 +1,6 @@
 <script setup>
 
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import axios from "axios";
 
 const posts = ref([])
@@ -32,22 +32,22 @@ onMounted(() => {
 	fetchPosts(page.value)
 })
 
+
 </script>
 
 <template>
 	<div>Posts</div>
 	<div class="posts-list">
-		<div class="posts-item"
-			 v-for="post in posts">
-			<div class="posts-item__title">{{ post.id }}</div>
+		<router-link :to="'/posts/' + post.id" class="posts-item"
+					 v-for="post in posts">
 			<div class="posts-item__title">{{ post.title }}</div>
 			<div>{{ post.body }}</div>
-		</div>
+		</router-link>
 	</div>
 	<div class="pagination">
 		<div class="pagination-item"
 			 @click="addMorePosts(item)"
-			 v-for="item in totalPages">{{item}}
+			 v-for="item in totalPages">{{ item }}
 		</div>
 	</div>
 </template>
@@ -64,6 +64,7 @@ onMounted(() => {
 		border-radius: 1.5rem;
 		padding: 1.15rem;
 		border: 2px solid var(--color-border);
+		color: inherit;
 		
 		&__title {
 			color: var(--green);
