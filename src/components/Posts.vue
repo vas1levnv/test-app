@@ -8,15 +8,15 @@ const limit = ref(10)
 const page = ref(1)
 const totalPages = ref(null)
 
-const fetchPosts = async() => {
+const fetchPosts = async(page) => {
 	try {
 		const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
 			params: {
 				_limit: limit.value,
-				_page: page.value,
+				_page: page,
 			}
 		})
-		totalPages.value = (response.headers['x-total-count'] / limit.value)
+		totalPages.value = Math.ceil(response.headers['x-total-count'] / limit.value)
 		posts.value = response.data
 	} catch(e) {
 		console.error(e)
@@ -24,12 +24,12 @@ const fetchPosts = async() => {
 	
 }
 
-const addMorePosts = () => {
-	fetchPosts()
+const addMorePosts = (page) => {
+	fetchPosts(page)
 }
 
 onMounted(() => {
-	fetchPosts()
+	fetchPosts(page.value)
 })
 
 </script>
@@ -39,11 +39,17 @@ onMounted(() => {
 	<div class="posts-list">
 		<div class="posts-item"
 			 v-for="post in posts">
+			<div class="posts-item__title">{{ post.id }}</div>
 			<div class="posts-item__title">{{ post.title }}</div>
 			<div>{{ post.body }}</div>
 		</div>
 	</div>
-	<button @click="">Загрузить еще!</button>
+	<div class="pagination">
+		<div class="pagination-item"
+			 @click="addMorePosts(item)"
+			 v-for="item in totalPages">{{item}}
+		</div>
+	</div>
 </template>
 
 <style scoped lang="scss">
@@ -71,6 +77,17 @@ onMounted(() => {
 	.posts {
 		&-list {
 			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+	
+	.pagination {
+		display: flex;
+		justify-content: center;
+		margin-top: 2rem;
+		
+		&-item {
+			padding: 0.5rem;
+			cursor: pointer;
 		}
 	}
 }
