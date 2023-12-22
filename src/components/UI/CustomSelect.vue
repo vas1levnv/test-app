@@ -114,7 +114,7 @@ export default {
 	
 	border: 2px solid var(--color-border);
 	
-	color: #fff;
+	color: var(--color-text);
 	
 	padding-left: 1em;
 	
@@ -160,7 +160,7 @@ export default {
 
 .custom-select .items {
 	
-	color: #fff;
+	color: var(--color-text);
 	
 	border-radius: 0px 0px 6px 6px;
 	
@@ -188,7 +188,7 @@ export default {
 
 .custom-select .items div {
 	
-	color: #fff;
+	color: var(--color-text);
 	
 	padding-left: 1em;
 	
