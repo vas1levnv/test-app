@@ -1,6 +1,6 @@
 <script setup>
 
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import axios from "axios";
 import Preloader from "@/components/UI/Preloader.vue";
 import CustomButton from "@/components/UI/CustomButton.vue";
@@ -42,6 +42,10 @@ onMounted(() => {
 	fetchPosts(page.value)
 })
 
+const showPage = computed(() => {
+	
+})
+
 </script>
 
 <template>
@@ -52,7 +56,7 @@ onMounted(() => {
 			<div class="posts-item__title">{{ post.title }}</div>
 			<div class="posts-item__body">{{ post.body }}</div>
 			
-			<router-link  :to="'/posts/' + post.id">
+			<router-link :to="'/posts/' + post.id">
 				<custom-button>
 					Detail post
 				</custom-button>
@@ -64,6 +68,14 @@ onMounted(() => {
 		<div class="pagination-item"
 			 @click="changePage(item)"
 			 :class="{active: item === currentPage}"
+			 v-show="item === currentPage 
+			 || item === currentPage + 1 
+			 || item === currentPage + 2
+			 || item === currentPage - 1
+			 || item === currentPage - 2
+			 || item === 1
+			 || item === totalPages
+"
 			 v-for="item in totalPages">{{ item }}
 		</div>
 	</div>
@@ -93,13 +105,14 @@ onMounted(() => {
 			color: var(--green);
 			font-weight: 500;
 		}
-		a{
+		
+		a {
 			display: flex;
 			align-items: end;
 			width: fit-content;
 			border-radius: 0.5rem;
 			align-self: end;
-			flex:  1 1 0;
+			flex: 1 1 0;
 		}
 	}
 }
@@ -113,7 +126,7 @@ onMounted(() => {
 		padding: 0.5rem;
 		cursor: pointer;
 		border-radius: 0.5rem;
-
+		
 		
 		&.active, &:hover {
 			background: var(--green_hover);
