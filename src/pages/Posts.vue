@@ -5,11 +5,12 @@ import axios from "axios";
 import Preloader from "@/components/UI/Preloader.vue";
 
 const posts = ref([])
-const limit = ref(10)
+const limit = ref(9)
 const page = ref(1)
 const totalPages = ref(null)
 const isLoading = ref(false)
 const error = ref(null)
+const currentPage = ref(1)
 
 const fetchPosts = async(page) => {
 	try {
@@ -22,7 +23,8 @@ const fetchPosts = async(page) => {
 		})
 		totalPages.value = Math.ceil(response.headers['x-total-count'] / limit.value)
 		posts.value = response.data
-		await new Promise((resolve, reject) => setTimeout(resolve, 2000))
+		currentPage.value = page
+		await new Promise((resolve) => setTimeout(resolve, 2000))
 	} catch(e) {
 		error.value = e.message
 	} finally {
@@ -53,10 +55,11 @@ onMounted(() => {
 	<div class="pagination">
 		<div class="pagination-item"
 			 @click="changePage(item)"
+			 :class="{active: item === currentPage}"
 			 v-for="item in totalPages">{{ item }}
 		</div>
 	</div>
-	<div class="error">{{ error}}</div>
+	<div class="error">{{ error }}</div>
 	<Preloader v-show="isLoading"/>
 </template>
 
@@ -90,6 +93,12 @@ onMounted(() => {
 	&-item {
 		padding: 0.5rem;
 		cursor: pointer;
+		border-radius: 0.5rem;
+		
+		&.active, &:hover {
+			background: var(--green_hover);
+			font-weight: 700;
+		}
 	}
 }
 

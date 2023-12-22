@@ -15,5 +15,6 @@
 <style scoped>
 .header {
 	margin-bottom: 1rem;
+	font-size: 1.5rem;
 }
 </style>

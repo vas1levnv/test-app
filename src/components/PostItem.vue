@@ -17,7 +17,7 @@ const fetchPost = async() => {
 	try {
 		isLoading.value = true
 		const response = await axios.get('https://jsonplaceholder.typicode.com/posts/' + id)
-		await new Promise((resolve, reject) => setTimeout(resolve, 2000))
+		await new Promise((resolve) => setTimeout(resolve, 2000))
 		post.value = response.data
 	} catch(e) {
 		error.value = e.message
@@ -34,7 +34,7 @@ const showComment = async() => {
 				postId: id
 			}
 		})
-		await new Promise((resolve, reject) => setTimeout(resolve, 2000))
+		await new Promise((resolve) => setTimeout(resolve, 2000))
 		comments.value = response.data
 	} catch(e) {
 		error.value = e.message
@@ -58,7 +58,9 @@ onMounted(() => {
 		<CustomButton @click="showComment">Show comments</CustomButton>
 		<div class="comments-list" v-if="comments">
 			<div class="comments-item" v-for="comment in comments">
-				<div>{{ comment.email }}</div>
+				<div>email: {{ comment.email }}</div>
+				<div>name: {{ comment.name }}</div>
+				<div>body: {{ comment.body }}</div>
 			</div>
 		</div>
 	</div>

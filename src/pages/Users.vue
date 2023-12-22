@@ -3,17 +3,19 @@
 import {onMounted, ref} from "vue";
 import axios from "axios";
 import Preloader from "@/components/UI/Preloader.vue";
+import CustomInput from "@/components/UI/CustomInput.vue";
 
 const users = ref([])
 const isLoading = ref(false)
 const error = ref(null)
+const inputName = ref(null)
 
 const fetchPosts = async() => {
 	try {
 		isLoading.value = true
 		const response = await axios.get('https://jsonplaceholder.typicode.com/users')
 		users.value = response.data
-		await new Promise((resolve, reject) => setTimeout(resolve, 2000))
+		await new Promise((resolve) => setTimeout(resolve, 2000))
 	} catch(e) {
 		error.value = e.message
 	} finally {
@@ -30,6 +32,10 @@ onMounted(() => {
 
 <template>
 	<div>Users</div>
+	<div class="users-field">
+		<div>{{ inputName }}</div>
+		<custom-input v-model="inputName"/>
+	</div>
 	<div class="user-list">
 		<div class="user-item"
 			 v-for="user in users">
@@ -59,10 +65,6 @@ onMounted(() => {
 		border-radius: 1.5rem;
 		padding: 1.15rem;
 		border: 2px solid var(--color-border);
-		
-		&__address {
-			
-		}
 	}
 }
 
