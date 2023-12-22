@@ -8,9 +8,12 @@ const posts = ref([])
 const limit = ref(10)
 const page = ref(1)
 const totalPages = ref(null)
+const isLoading = ref(false)
+const error = ref(null)
 
 const fetchPosts = async(page) => {
 	try {
+		isLoading.value = true
 		const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
 			params: {
 				_limit: limit.value,
@@ -19,13 +22,16 @@ const fetchPosts = async(page) => {
 		})
 		totalPages.value = Math.ceil(response.headers['x-total-count'] / limit.value)
 		posts.value = response.data
+		await new Promise((resolve, reject) => setTimeout(resolve, 2000))
 	} catch(e) {
-		console.error(e)
+		error.value = e.message
+	} finally {
+		isLoading.value = false
 	}
 	
 }
 
-const addMorePosts = (page) => {
+const changePage = (page) => {
 	fetchPosts(page)
 }
 
@@ -46,11 +52,12 @@ onMounted(() => {
 	</div>
 	<div class="pagination">
 		<div class="pagination-item"
-			 @click="addMorePosts(item)"
+			 @click="changePage(item)"
 			 v-for="item in totalPages">{{ item }}
 		</div>
 	</div>
-	<Preloader/>
+	<div class="error">{{ error}}</div>
+	<Preloader v-show="isLoading"/>
 </template>
 
 <style scoped lang="scss">
@@ -75,21 +82,21 @@ onMounted(() => {
 	}
 }
 
+.pagination {
+	display: flex;
+	justify-content: center;
+	margin-top: 2rem;
+	
+	&-item {
+		padding: 0.5rem;
+		cursor: pointer;
+	}
+}
+
 @media (min-width: 1024px) {
 	.posts {
 		&-list {
 			grid-template-columns: repeat(3, 1fr);
-		}
-	}
-	
-	.pagination {
-		display: flex;
-		justify-content: center;
-		margin-top: 2rem;
-		
-		&-item {
-			padding: 0.5rem;
-			cursor: pointer;
 		}
 	}
 }

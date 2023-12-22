@@ -2,15 +2,22 @@
 
 import {onMounted, ref} from "vue";
 import axios from "axios";
+import Preloader from "@/components/UI/Preloader.vue";
 
 const users = ref([])
+const isLoading = ref(false)
+const error = ref(null)
 
 const fetchPosts = async() => {
 	try {
+		isLoading.value = true
 		const response = await axios.get('https://jsonplaceholder.typicode.com/users')
 		users.value = response.data
+		await new Promise((resolve, reject) => setTimeout(resolve, 2000))
 	} catch(e) {
-		console.error(e)
+		error.value = e.message
+	} finally {
+		isLoading.value = false
 	}
 	
 }
@@ -36,6 +43,8 @@ onMounted(() => {
 			</div>
 		</div>
 	</div>
+	<div v-show="error">{{ error }}</div>
+	<Preloader v-show="isLoading"/>
 </template>
 
 <style scoped lang="scss">
