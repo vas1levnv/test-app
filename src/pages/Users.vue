@@ -37,7 +37,7 @@ const searchedPosts = computed(() => {
 		/>
 	</div>
 	<div class="user-list">
-		<div class="user-item"
+		<router-link :to="'users/' + user.id" class="user-item"
 			 v-for="user in searchedPosts">
 			<div>{{ user.name }}</div>
 			<div class="user-item__address">
@@ -46,7 +46,7 @@ const searchedPosts = computed(() => {
 				<div>City: {{ user.address.city }}</div>
 				<div>Suite: {{ user.address.suite }}</div>
 			</div>
-		</div>
+		</router-link>
 	</div>
 	<div v-show="error" class="error">{{ error }}</div>
 	<Preloader v-show="isLoading"/>
