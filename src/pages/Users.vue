@@ -63,7 +63,6 @@ const searchedPosts = computed(() => {
 				<div>Street: {{ user.address.street }}</div>
 				<div>City: {{ user.address.city }}</div>
 				<div>Suite: {{ user.address.suite }}</div>
-				<div></div>
 			</div>
 		</div>
 	</div>

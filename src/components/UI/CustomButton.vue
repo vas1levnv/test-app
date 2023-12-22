@@ -18,6 +18,7 @@ button {
 	font-weight: 700;
 	transition: 0.4s ease;
 	cursor: pointer;
+	overflow: hidden;
 	
 	&:hover {
 		background: var(--green);

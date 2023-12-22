@@ -3,6 +3,7 @@
 import {onMounted, ref} from "vue";
 import axios from "axios";
 import Preloader from "@/components/UI/Preloader.vue";
+import CustomButton from "@/components/UI/CustomButton.vue";
 
 const posts = ref([])
 const limit = ref(9)
@@ -46,11 +47,18 @@ onMounted(() => {
 <template>
 	<div>Posts</div>
 	<div class="posts-list">
-		<router-link :to="'/posts/' + post.id" class="posts-item"
-					 v-for="post in posts">
+		<div class="posts-item"
+			 v-for="post in posts">
 			<div class="posts-item__title">{{ post.title }}</div>
-			<div>{{ post.body }}</div>
-		</router-link>
+			<div class="posts-item__body">{{ post.body }}</div>
+			
+			<router-link  :to="'/posts/' + post.id">
+				<custom-button>
+					Detail post
+				</custom-button>
+			</router-link>
+		
+		</div>
 	</div>
 	<div class="pagination">
 		<div class="pagination-item"
@@ -72,15 +80,26 @@ onMounted(() => {
 	}
 	
 	&-item {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
 		border-radius: 1.5rem;
 		padding: 1.15rem;
 		border: 2px solid var(--color-border);
 		color: inherit;
 		
+		
 		&__title {
 			color: var(--green);
 			font-weight: 500;
-			margin-bottom: 0.5rem;
+		}
+		a{
+			display: flex;
+			align-items: end;
+			width: fit-content;
+			border-radius: 0.5rem;
+			align-self: end;
+			flex:  1 1 0;
 		}
 	}
 }
@@ -94,6 +113,7 @@ onMounted(() => {
 		padding: 0.5rem;
 		cursor: pointer;
 		border-radius: 0.5rem;
+
 		
 		&.active, &:hover {
 			background: var(--green_hover);
