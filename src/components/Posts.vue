@@ -1,7 +1,8 @@
 <script setup>
 
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref} from "vue";
 import axios from "axios";
+import Preloader from "@/components/UI/Preloader.vue";
 
 const posts = ref([])
 const limit = ref(10)
@@ -32,7 +33,6 @@ onMounted(() => {
 	fetchPosts(page.value)
 })
 
-
 </script>
 
 <template>
@@ -50,6 +50,7 @@ onMounted(() => {
 			 v-for="item in totalPages">{{ item }}
 		</div>
 	</div>
+	<Preloader/>
 </template>
 
 <style scoped lang="scss">

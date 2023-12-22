@@ -3,7 +3,7 @@
 import {useRoute} from "vue-router";
 import {onMounted, ref} from "vue";
 import axios from "axios";
-import CustomButton from "@/components/CustomButton.vue";
+import CustomButton from "@/components/UI/CustomButton.vue";
 
 const route = useRoute()
 const id = route.params.id
