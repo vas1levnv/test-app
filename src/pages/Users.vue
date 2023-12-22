@@ -4,11 +4,18 @@ import {computed, onMounted, ref} from "vue";
 import axios from "axios";
 import Preloader from "@/components/UI/Preloader.vue";
 import CustomInput from "@/components/UI/CustomInput.vue";
+import CustomSelect from "@/components/UI/CustomSelect.vue";
 
 const users = ref([])
 const isLoading = ref(false)
 const error = ref(null)
 const searchText = ref('')
+const options = ref([
+	{title: 'Street', body: 'street'},
+	{title: 'City', body: 'city'},
+	{title: 'Suite', body: 'suite'},
+])
+const selectedOption = ref('')
 
 const fetchPosts = async() => {
 	try {
@@ -28,8 +35,12 @@ onMounted(() => {
 	fetchPosts()
 })
 
+const sortedUsers = computed(() => {
+	return [...users.value].sort((item1, item2) => item1.address[selectedOption.value]?.localeCompare(item2.address[selectedOption.value]))
+})
+
 const searchedPosts = computed(() => {
-	return users.value.filter(user => user.name.toLowerCase().includes(searchText.value.toLowerCase()))
+	return sortedUsers.value.filter(user => user.name.toLowerCase().includes(searchText.value.toLowerCase()))
 })
 
 </script>
@@ -37,7 +48,11 @@ const searchedPosts = computed(() => {
 <template>
 	<div>Users</div>
 	<div class="user-field">
-		<custom-input placeholder="Поиск по имени..." v-model="searchText"/>
+		<custom-input placeholder="Search by name..." v-model="searchText"/>
+		<CustomSelect
+			:options="options"
+			@input="selectedOption = $event"
+		/>
 	</div>
 	<div class="user-list">
 		<div class="user-item"
@@ -59,6 +74,9 @@ const searchedPosts = computed(() => {
 <style scoped lang="scss">
 .user {
 	&-field {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 		margin-top: 1rem;
 	}
 	
@@ -77,6 +95,15 @@ const searchedPosts = computed(() => {
 
 @media (min-width: 1024px) {
 	.user {
+		
+		&-field {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			gap: 1rem;
+			margin-top: 1rem;
+		}
+		
 		&-list {
 			grid-template-columns: repeat(3, 1fr);
 		}
