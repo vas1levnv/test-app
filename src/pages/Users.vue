@@ -1,15 +1,13 @@
 <script setup>
 
-import {computed, onMounted, ref} from "vue";
-import axios from "axios";
+import {computed, ref} from "vue";
 import Preloader from "@/components/UI/Preloader.vue";
 import CustomInput from "@/components/UI/CustomInput.vue";
 import CustomSelect from "@/components/UI/CustomSelect.vue";
+import {useGetData} from "@/hooks/useGetData.js";
 
-const users = ref([])
-const isLoading = ref(false)
-const error = ref(null)
 const searchText = ref('')
+const endpoint = ref('users')
 const options = ref([
 	{title: 'Street', body: 'street'},
 	{title: 'City', body: 'city'},
@@ -17,26 +15,10 @@ const options = ref([
 ])
 const selectedOption = ref('')
 
-const fetchPosts = async() => {
-	try {
-		isLoading.value = true
-		const response = await axios.get('https://jsonplaceholder.typicode.com/users')
-		users.value = response.data
-		await new Promise((resolve) => setTimeout(resolve, 2000))
-	} catch(e) {
-		error.value = e.message
-	} finally {
-		isLoading.value = false
-	}
-	
-}
-
-onMounted(() => {
-	fetchPosts()
-})
+const {arr, isLoading, error} = useGetData(endpoint)
 
 const sortedUsers = computed(() => {
-	return [...users.value].sort((item1, item2) => item1.address[selectedOption.value]?.localeCompare(item2.address[selectedOption.value]))
+	return [...arr.value].sort((item1, item2) => item1.address[selectedOption.value]?.localeCompare(item2.address[selectedOption.value]))
 })
 
 const searchedPosts = computed(() => {
@@ -66,7 +48,7 @@ const searchedPosts = computed(() => {
 			</div>
 		</div>
 	</div>
-	<div v-show="error">{{ error }}</div>
+	<div v-show="error" class="error">{{ error }}</div>
 	<Preloader v-show="isLoading"/>
 </template>
 

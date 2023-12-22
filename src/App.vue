@@ -14,6 +14,8 @@
 
 <style scoped>
 .header {
+	display: flex;
+	gap: 1rem;
 	margin-bottom: 1rem;
 	font-size: 1.5rem;
 }
