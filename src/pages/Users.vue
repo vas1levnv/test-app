@@ -1,6 +1,6 @@
 <script setup>
 
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import axios from "axios";
 import Preloader from "@/components/UI/Preloader.vue";
 import CustomInput from "@/components/UI/CustomInput.vue";
@@ -8,7 +8,7 @@ import CustomInput from "@/components/UI/CustomInput.vue";
 const users = ref([])
 const isLoading = ref(false)
 const error = ref(null)
-const inputName = ref(null)
+const searchText = ref('')
 
 const fetchPosts = async() => {
 	try {
@@ -28,17 +28,20 @@ onMounted(() => {
 	fetchPosts()
 })
 
+const searchedPosts = computed(() => {
+	return users.value.filter(user => user.name.toLowerCase().includes(searchText.value.toLowerCase()))
+})
+
 </script>
 
 <template>
 	<div>Users</div>
-	<div class="users-field">
-		<div>{{ inputName }}</div>
-		<custom-input v-model="inputName"/>
+	<div class="user-field">
+		<custom-input placeholder="Поиск по имени..." v-model="searchText"/>
 	</div>
 	<div class="user-list">
 		<div class="user-item"
-			 v-for="user in users">
+			 v-for="user in searchedPosts">
 			<div>{{ user.name }}</div>
 			<div class="user-item__address">
 				<div style="font-weight: 700">Address:</div>
@@ -55,6 +58,10 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .user {
+	&-field {
+		margin-top: 1rem;
+	}
+	
 	&-list {
 		display: grid;
 		gap: 1rem;
